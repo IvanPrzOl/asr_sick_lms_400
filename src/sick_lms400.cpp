@@ -29,7 +29,7 @@
  *
  */
 
-#include <sick_lms400.h>
+#include <asr_sick_lms_400/sick_lms400.h>
 #include <angles/angles.h>
 
 const int CMD_BUFFER_SIZE = 255;
@@ -37,7 +37,7 @@ const int CMD_BUFFER_SIZE = 255;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Constructor.
-asr_sick_lms_400::asr_sick_lms_400::asr_sick_lms_400 (const char* host, int port, int debug_mode)
+asr_sick_lms_400::sick_lms_400::sick_lms_400 (const char* host, int port, int debug_mode)
 {
   portno_   = port;
   hostname_ = host;
@@ -50,7 +50,7 @@ asr_sick_lms_400::asr_sick_lms_400::asr_sick_lms_400 (const char* host, int port
 // Connect to the LMS400 unit using hostname:portno
 // Returns 0 if connection was successful, -1 otherwise
 int
-  asr_sick_lms_400::asr_sick_lms_400::Connect ()
+  asr_sick_lms_400::sick_lms_400::Connect ()
 {
   // Create a socket
   sockfd_ = socket (AF_INET, SOCK_STREAM, 0);
@@ -96,7 +96,7 @@ int
 // Disconnect from the LMS400 unit
 // Returns 0 if connection was successful, -1 otherwise
 int
-  asr_sick_lms_400::asr_sick_lms_400::Disconnect ()
+  asr_sick_lms_400::sick_lms_400::Disconnect ()
 {
   return (close (sockfd_));
 }
@@ -104,7 +104,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Enable/Disable extended RIS (Remission Information System) detectivity
 int
-  asr_sick_lms_400::asr_sick_lms_400::EnableRIS (int onoff)
+  asr_sick_lms_400::sick_lms_400::EnableRIS (int onoff)
 {
   char cmd[CMD_BUFFER_SIZE];
   snprintf (cmd, CMD_BUFFER_SIZE, "sWN MDblex %i", onoff);
@@ -119,7 +119,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Set the mean filter parameters
 int
-  asr_sick_lms_400::asr_sick_lms_400::SetMeanFilterParameters (int num_scans)
+  asr_sick_lms_400::sick_lms_400::SetMeanFilterParameters (int num_scans)
 {
   char cmd[CMD_BUFFER_SIZE];
   snprintf (cmd, CMD_BUFFER_SIZE, "sWN FLmean 0 %i", num_scans);
@@ -134,7 +134,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Set the range filter parameters
 int
-  asr_sick_lms_400::asr_sick_lms_400::SetRangeFilterParameters (float range_min, float range_max)
+  asr_sick_lms_400::sick_lms_400::SetRangeFilterParameters (float range_min, float range_max)
 {
   char cmd[CMD_BUFFER_SIZE];
   snprintf (cmd, CMD_BUFFER_SIZE, "sWN FLrang %+f %+f", (float)range_min, (float)range_max);
@@ -150,7 +150,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Enable filters using a filter mask
 int
-  asr_sick_lms_400::asr_sick_lms_400::EnableFilters (int filter_mask)
+  asr_sick_lms_400::sick_lms_400::EnableFilters (int filter_mask)
 {
   char cmd[CMD_BUFFER_SIZE];
   snprintf (cmd, CMD_BUFFER_SIZE, "sWN FLsel %+i", filter_mask);
@@ -165,7 +165,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Takes a string containing an ip adress and returns an array of 4 u_chars
 unsigned char*
-  asr_sick_lms_400::asr_sick_lms_400::ParseIP (char* ip)
+  asr_sick_lms_400::sick_lms_400::ParseIP (char* ip)
 {
   char* tmp = (char*) malloc (strlen (ip) + 1);
   unsigned char* _ip = (unsigned char*) malloc (4);
@@ -182,7 +182,7 @@ unsigned char*
 ////////////////////////////////////////////////////////////////////////////////
 // Set the desired userlevel by logging in with the appropriate password
 int
-  asr_sick_lms_400::asr_sick_lms_400::SetUserLevel (int8_t userlevel, const char* password)
+  asr_sick_lms_400::sick_lms_400::SetUserLevel (int8_t userlevel, const char* password)
 {
   char cmd[CMD_BUFFER_SIZE];
   snprintf (cmd, CMD_BUFFER_SIZE, "sMN SetAccessMode %d %s", userlevel, password);
@@ -193,7 +193,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Fills string pointed to by macadress with the MAC adress read from the sensor
 int
-  asr_sick_lms_400::asr_sick_lms_400::GetMACAddress (char** macaddress)
+  asr_sick_lms_400::sick_lms_400::GetMACAddress (char** macaddress)
 {
   char *mac = (char*) malloc (20);
   int index = 0;
@@ -222,7 +222,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Set the IP address of the LMS400
 int
-  asr_sick_lms_400::asr_sick_lms_400::SetIP (char* ip)
+  asr_sick_lms_400::sick_lms_400::SetIP (char* ip)
 {
   unsigned char* ip_str;
   ip_str = ParseIP (ip);
@@ -238,7 +238,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Set the gateway address for the Ethernet interface
 int
-  asr_sick_lms_400::asr_sick_lms_400::SetGateway (char* gw)
+  asr_sick_lms_400::sick_lms_400::SetGateway (char* gw)
 {
   unsigned char* gw_str;
   gw_str = ParseIP (gw);
@@ -254,7 +254,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Set the subnet mask for the Ethernet interface
 int
-  asr_sick_lms_400::asr_sick_lms_400::SetNetmask (char* mask)
+  asr_sick_lms_400::sick_lms_400::SetNetmask (char* mask)
 {
   unsigned char* mask_str;
   mask_str = ParseIP (mask);
@@ -270,7 +270,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Set port for TCP/IP communication
 int
-  asr_sick_lms_400::asr_sick_lms_400::SetPort (uint16_t port)
+  asr_sick_lms_400::sick_lms_400::SetPort (uint16_t port)
 {
   char cmd[CMD_BUFFER_SIZE];
 
@@ -283,7 +283,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Reset the LMS400 unit
 int
-  asr_sick_lms_400::asr_sick_lms_400::ResetDevice ()
+  asr_sick_lms_400::sick_lms_400::ResetDevice ()
 {
   const char* cmd = "sMN mDCreset ";
   SendCommand (cmd);
@@ -294,7 +294,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Terminate configuration and change back to userlevel 0
 int
-  asr_sick_lms_400::asr_sick_lms_400::TerminateConfiguration ()
+  asr_sick_lms_400::sick_lms_400::TerminateConfiguration ()
 {
   const char* cmd = "sMN Run";
   SendCommand (cmd);
@@ -305,7 +305,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Set the laser angular resolution. Requires userlevel 2. Unused for now.
 int
-  asr_sick_lms_400::asr_sick_lms_400::SetAngularResolution (const char* password, float ang_res,
+  asr_sick_lms_400::sick_lms_400::SetAngularResolution (const char* password, float ang_res,
                                                  float angle_start, float angle_range)
 {
   char cmd[CMD_BUFFER_SIZE];
@@ -319,7 +319,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Set the laser scanning frequency. Requires userlevel 2. Unused for now.
 int
-  asr_sick_lms_400::asr_sick_lms_400::SetScanningFrequency (const char* password, float freq,
+  asr_sick_lms_400::sick_lms_400::SetScanningFrequency (const char* password, float freq,
                                     float angle_start, float angle_range)
 {
   char cmd[CMD_BUFFER_SIZE];
@@ -333,7 +333,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Set both resolution and frequency without going to a higher user level (?)
 int
-  asr_sick_lms_400::asr_sick_lms_400::SetResolutionAndFrequency (float freq, float ang_res,
+  asr_sick_lms_400::sick_lms_400::SetResolutionAndFrequency (float freq, float ang_res,
                                          float angle_start, float angle_range)
 {
   char cmd[CMD_BUFFER_SIZE];
@@ -368,7 +368,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Start a measurement for both distance and intensity or just distance.
 int
-  asr_sick_lms_400::asr_sick_lms_400::StartMeasurement (bool intensity)
+  asr_sick_lms_400::sick_lms_400::StartMeasurement (bool intensity)
 {
   char cmd[CMD_BUFFER_SIZE];
   if (intensity)
@@ -384,7 +384,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Read a measurement
 sensor_msgs::LaserScan
-  asr_sick_lms_400::asr_sick_lms_400::ReadMeasurement ()
+  asr_sick_lms_400::sick_lms_400::ReadMeasurement ()
 {
   sensor_msgs::LaserScan scan;
 
@@ -504,7 +504,7 @@ sensor_msgs::LaserScan
 ////////////////////////////////////////////////////////////////////////////////
 // Stop a measurement
 int
-  asr_sick_lms_400::asr_sick_lms_400::StopMeasurement ()
+  asr_sick_lms_400::sick_lms_400::StopMeasurement ()
 {
   char cmd[CMD_BUFFER_SIZE];
   snprintf (cmd, CMD_BUFFER_SIZE, "sMN mLRstopdata");
@@ -516,7 +516,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Send a command to the laser unit. Returns -1 on error.
 int
-  asr_sick_lms_400::asr_sick_lms_400::SendCommand (const char* cmd)
+  asr_sick_lms_400::sick_lms_400::SendCommand (const char* cmd)
 {
   if (verbose_ > 0)
     ROS_DEBUG (">> Sent: \"%s\"\n", cmd);
@@ -532,7 +532,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Read a result from the laser unit.
 int
-  asr_sick_lms_400::asr_sick_lms_400::ReadResult ()
+  asr_sick_lms_400::sick_lms_400::ReadResult ()
 {
   memset (buffer_, 0, 256);
   n_ = read (sockfd_, buffer_, 8);
@@ -601,7 +601,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Read an answer from the laser unit
 int
-  asr_sick_lms_400::asr_sick_lms_400::ReadAnswer ()
+  asr_sick_lms_400::sick_lms_400::ReadAnswer ()
 {
   return (ReadResult ());
 }
@@ -609,7 +609,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Read a confirmation and an answer from the laser unit
 int
-  asr_sick_lms_400::asr_sick_lms_400::ReadConfirmationAndAnswer ()
+  asr_sick_lms_400::sick_lms_400::ReadConfirmationAndAnswer ()
 {
   ReadResult ();
   if (buffer_[0] == 's' && buffer_[1] == 'F' && buffer_[2] == 'A')
@@ -621,7 +621,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // adds a header and the checksum to the command to be sent
 int
-  asr_sick_lms_400::asr_sick_lms_400::AssembleCommand (unsigned char* cmd, int len)
+  asr_sick_lms_400::sick_lms_400::AssembleCommand (unsigned char* cmd, int len)
 {
   unsigned char checksum = 0;
   int index = 0;

@@ -61,11 +61,11 @@ namespace asr_sick_lms_400
 
 
   ////////////////////////////////////////////////////////////////////////////////
-  class asr_sick_lms_400
+  class sick_lms_400
   {
     public:
-      asr_sick_lms_400 () { }
-      asr_sick_lms_400 (const char* host, int port, int debug_mode);
+      sick_lms_400 () { }
+      sick_lms_400 (const char* host, int port, int debug_mode);
 
       // Creates socket, connects
       int Connect ();

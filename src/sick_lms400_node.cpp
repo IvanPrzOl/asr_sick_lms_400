@@ -57,7 +57,7 @@ class LMS400Node
     ros::NodeHandle nh_;
   public:
 
-    asr_sick_lms_400 lms_;
+    sick_lms_400 lms_;
     LaserScan scan_;
 
     Publisher scan_pub_;
@@ -152,7 +152,7 @@ class LMS400Node
       start ()
     {
       // Open the LMS400 device
-      lms_ = asr_sick_lms_400 (hostname_.c_str (), port_, debug_);
+      lms_ = sick_lms_400 (hostname_.c_str (), port_, debug_);
 
       // Attempt to connect to the laser unit
       if (lms_.Connect () != 0)
@@ -360,4 +360,3 @@ int
   return (0);
 }
 /* ]--- */
-
