@@ -117,6 +117,21 @@ int
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Set the encoder type (0-4)
+int
+  asr_sick_lms_400::sick_lms_400::SetEncoderType (int encoder_type)
+{
+  char cmd[CMD_BUFFER_SIZE];
+  snprintf (cmd, CMD_BUFFER_SIZE, "sWN IOencm %i", encoder_type);
+  SendCommand (cmd);
+
+  if (ReadAnswer () != 0)
+    return (-1);
+  EncoderType_ = encoder_type;
+  return (0);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Set the mean filter parameters
 int
   asr_sick_lms_400::sick_lms_400::SetMeanFilterParameters (int num_scans)
@@ -384,7 +399,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Read a measurement
 sensor_msgs::LaserScan
-  asr_sick_lms_400::sick_lms_400::ReadMeasurement ()
+  asr_sick_lms_400::sick_lms_400::ReadMeasurement (std_msgs::UInt16 &encoder_position_)
 {
   sensor_msgs::LaserScan scan;
 
@@ -463,6 +478,7 @@ sensor_msgs::LaserScan
   uint16_t distance = 0;
   uint8_t remission = 0;
   int index = sizeof (MeasurementHeader_t);
+  uint16_t encoder_position = 0;
 
   // Fill in the appropriate values
   scan.angle_min       = angles::from_degrees (min_angle);
@@ -495,7 +511,15 @@ sensor_msgs::LaserScan
       ROS_DEBUG (" >>> [%i] dist: %i\t remission: %i", i, distance * meas_header.DistanceScaling, remission * meas_header.RemissionScaling);
   }
 
-  scan.header.frame_id = "lms400_tilt_laser";
+  index += 3 * sizeof (uint16_t);
+  memcpy (&encoder_position, (void *)&buffer_[index], sizeof (uint16_t) );
+  encoder_position_.data = encoder_position;
+  index += sizeof (uint16_t);
+  
+  if (verbose_ == 2)
+    ROS_DEBUG (">>> Encoder position: %d", encoder_position);
+
+  scan.header.frame_id = "lms400_base";
   scan.header.stamp = ros::Time::now ();
 
   return (scan);

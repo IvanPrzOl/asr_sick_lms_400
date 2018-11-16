@@ -42,6 +42,7 @@ The code is based on the LGPL-ed LMS400 Player driver by Nico Blodow and Radu Bo
 #include <ros/ros.h>
 #include <geometry_msgs/Point.h>
 #include <sensor_msgs/LaserScan.h>
+#include <std_msgs/UInt16.h>
 
 #include <asr_sick_lms_400/sick_lms400.h>
 
@@ -59,8 +60,10 @@ class LMS400Node
 
     sick_lms_400 lms_;
     LaserScan scan_;
+    std_msgs::UInt16 encoder_position_;
 
     Publisher scan_pub_;
+    Publisher encoder_pub_;
 
     // TCP/IP connection parameters
     string hostname_, password_;
@@ -81,6 +84,10 @@ class LMS400Node
     double angular_resolution_, scanning_frequency_;
     double min_angle_, max_angle_;
     int eRIS_;
+    int encoder_type_;
+
+    // Encoder settings
+    int encoder_type;
 
     // Password for changing to userlevel 3 (service)
     bool loggedin_;
@@ -133,9 +140,14 @@ class LMS400Node
         // Defines the minimum / maximum angle of the laser unit (where the scan should start / end). Valid values: 55-125 degrees.
         nh_.param ("min_angle", min_angle_, 55.0);
         nh_.param ("max_angle", max_angle_, 125.0);
+
+        // Encoder type. Valid values are: 0 - No encoder, 1 - pulse encoder, 2 - phase encoder,
+        // 3 - level encoder, 4 - constant speed
+        nh_.param ("encoder_type", encoder_type_, 2);
       }
 
       scan_pub_ = nh_.advertise<LaserScan>("laser_scan", 1);
+      encoder_pub_ = nh_.advertise<std_msgs::UInt16>("encoder_position", 1);
 
       loggedin_  = false;
     }
@@ -194,6 +206,14 @@ class LMS400Node
         lms_.EnableRIS (1);
         ROS_INFO ("> [SickLMS400] Enabling extended RIS detectivity... [done]");
       }
+
+      // Enable extended RIS detectivity
+      if (encoder_type_)
+      {
+        lms_.SetEncoderType (encoder_type_);
+        ROS_INFO ("> [SickLMS400] Enabling encoder settings... [done]");
+      }
+
       // Set scanning parameters
       if (lms_.SetResolutionAndFrequency (scanning_frequency_, angular_resolution_, min_angle_, max_angle_ - min_angle_) != 0)
         ROS_ERROR ("> [SickLMS400] Couldn't set values for resolution, frequency, and min/max angle. Using previously set values.");
@@ -333,10 +353,11 @@ class LMS400Node
         // Refresh data only if laser power is on
         if (laser_enabled_)
         {
-          scan_ = lms_.ReadMeasurement ();
+          scan_ = lms_.ReadMeasurement (encoder_position_);
 
           if (scan_.ranges.size () != 0)
             scan_pub_.publish (scan_);
+          encoder_pub_.publish(encoder_position_);
           //ROS_INFO ("Publishing %d measurements.", (int)scan_.ranges.size ());
         }
         ros::spinOnce ();

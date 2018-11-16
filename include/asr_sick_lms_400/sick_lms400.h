@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include <netdb.h>
 #include <sensor_msgs/LaserScan.h>
+#include <std_msgs/UInt16.h>
 
 #define BUF_SIZE 1024
 
@@ -77,7 +78,7 @@ namespace asr_sick_lms_400
       int SetResolutionAndFrequency (float freq, float ang_res, float angle_start, float angle_range);
 
       int StartMeasurement (bool intensity = true);
-      sensor_msgs::LaserScan ReadMeasurement  ();
+      sensor_msgs::LaserScan ReadMeasurement  (std_msgs::UInt16 &);
       int StopMeasurement  ();
 
       int SetUserLevel  (int8_t userlevel, const char* password);
@@ -99,6 +100,7 @@ namespace asr_sick_lms_400
       int ReadConfirmationAndAnswer ();
 
       int EnableRIS (int onoff);
+      int SetEncoderType (int encoder_type);
       int SetMeanFilterParameters (int num_scans);
       int SetRangeFilterParameters (float range_min, float range_max);
       int EnableFilters (int filter_mask);
@@ -126,6 +128,7 @@ namespace asr_sick_lms_400
       float RangeFilterTopLimit_;
       float RangeFilterBottomLimit_;
       int FilterMask_;
+      int EncoderType_;
 
       long int scanning_frequency_, resolution_;
 
