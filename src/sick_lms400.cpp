@@ -490,7 +490,7 @@ sensor_msgs::LaserScan
   scan.intensities.resize (meas_header.NumberMeasuredValues);
   
   uint16_t scan_time_int = 0;
-  memcpy (&scan.scan_time_int, &buffer_[sizeof(MeasurementHeader_t) + meas_header.NumberMeasuredValues * 3 + 14], 2);
+  memcpy (&scan_time_int, &buffer_[sizeof(MeasurementHeader_t) + meas_header.NumberMeasuredValues * 3 + 14], 2);
   scan.scan_time = scan_time_int;
 
   // Parse the read buffer and copy values into our distance/intensity buffer
