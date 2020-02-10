@@ -488,8 +488,10 @@ sensor_msgs::LaserScan
   scan.range_max       = 3.6;
   scan.ranges.resize (meas_header.NumberMeasuredValues);
   scan.intensities.resize (meas_header.NumberMeasuredValues);
-
-  memcpy (&scan.scan_time, &buffer_[sizeof(MeasurementHeader_t) + meas_header.NumberMeasuredValues * 3 + 14], 2);
+  
+  uint16_t scan_time_int = 0;
+  memcpy (&scan.scan_time_int, &buffer_[sizeof(MeasurementHeader_t) + meas_header.NumberMeasuredValues * 3 + 14], 2);
+  scan.scan_time = scan_time_int;
 
   // Parse the read buffer and copy values into our distance/intensity buffer
   for (int i = 0; i < meas_header.NumberMeasuredValues; i++)
