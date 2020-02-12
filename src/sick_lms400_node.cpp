@@ -41,7 +41,7 @@ The code is based on the LGPL-ed LMS400 Player driver by Nico Blodow and Radu Bo
 
 #include <ros/ros.h>
 #include <geometry_msgs/Point.h>
-#include <sensor_msgs/LaserScan.h>
+#include <asr_sick_lms_400/PhenocarLaserScan.h>
 #include <std_msgs/UInt16.h>
 
 #include <asr_sick_lms_400/sick_lms400.h>
@@ -50,7 +50,6 @@ using namespace std;
 using namespace ros;
 using namespace asr_sick_lms_400;
 using namespace geometry_msgs;
-using namespace sensor_msgs;
 
 class LMS400Node
 {
@@ -59,7 +58,7 @@ class LMS400Node
   public:
 
     sick_lms_400 lms_;
-    LaserScan scan_;
+    asr_sick_lms_400::PhenocarLaserScan scan_;
     std_msgs::UInt16 encoder_position_;
 
     Publisher scan_pub_;
@@ -146,7 +145,7 @@ class LMS400Node
         nh_.param ("encoder_type", encoder_type_, 2);
       }
 
-      scan_pub_ = nh_.advertise<LaserScan>("laser_scan", 1);
+      scan_pub_ = nh_.advertise<asr_sick_lms_400::PhenocarLaserScan>("laser_scan", 1);
       encoder_pub_ = nh_.advertise<std_msgs::UInt16>("encoder_position", 1);
 
       loggedin_  = false;

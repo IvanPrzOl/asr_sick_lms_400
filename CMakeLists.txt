@@ -6,11 +6,22 @@ add_definitions(-std=gnu++0x)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  std_msgs
+  message_generation
 )
 
+add_message_files(
+  FILES
+  PhenocarLaserScan.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
 
 catkin_package(
-  CATKIN_DEPENDS roscpp
+  CATKIN_DEPENDS roscpp std_msgs message_generation
   INCLUDE_DIRS include
   LIBRARIES asr_sick_lms_400)
 
@@ -18,7 +29,6 @@ include_directories(include
       ${catkin_INCLUDE_DIRS}
       ${CMAKE_CURRENT_BINARY_DIR}
       )
-
 
 add_library(asr_sick_lms_400
     src/sick_lms400.cpp

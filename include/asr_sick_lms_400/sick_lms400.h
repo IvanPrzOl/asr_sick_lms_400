@@ -32,7 +32,7 @@
 #include <ros/ros.h>
 #include <stdlib.h>
 #include <netdb.h>
-#include <sensor_msgs/LaserScan.h>
+#include <asr_sick_lms_400/PhenocarLaserScan.h>
 #include <std_msgs/UInt16.h>
 
 #define BUF_SIZE 1024
@@ -78,7 +78,7 @@ namespace asr_sick_lms_400
       int SetResolutionAndFrequency (float freq, float ang_res, float angle_start, float angle_range);
 
       int StartMeasurement (bool intensity = true);
-      sensor_msgs::LaserScan ReadMeasurement  (std_msgs::UInt16 &);
+      asr_sick_lms_400::PhenocarLaserScan ReadMeasurement  (std_msgs::UInt16 &);
       int StopMeasurement  ();
 
       int SetUserLevel  (int8_t userlevel, const char* password);

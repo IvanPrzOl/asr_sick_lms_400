@@ -398,10 +398,10 @@ int
 
 ////////////////////////////////////////////////////////////////////////////////
 // Read a measurement
-sensor_msgs::LaserScan
+asr_sick_lms_400::PhenocarLaserScan
   asr_sick_lms_400::sick_lms_400::ReadMeasurement (std_msgs::UInt16 &encoder_position_)
 {
-  sensor_msgs::LaserScan scan;
+  asr_sick_lms_400::PhenocarLaserScan scan;
 
   char cs_read = 0, cs_calc = 0;
   int length  = 0;
@@ -489,9 +489,9 @@ sensor_msgs::LaserScan
   scan.ranges.resize (meas_header.NumberMeasuredValues);
   scan.intensities.resize (meas_header.NumberMeasuredValues);
   
-  uint16_t scan_time_int = 0;
-  memcpy (&scan_time_int, &buffer_[sizeof(MeasurementHeader_t) + meas_header.NumberMeasuredValues * 3 + 14], 2);
-  scan.scan_time = scan_time_int;
+  memcpy (&scan.scan_counter, &buffer_[sizeof(MeasurementHeader_t) + meas_header.NumberMeasuredValues * 3 + 12], 2);
+  memcpy (&scan.telegram_counter, &buffer_[sizeof(MeasurementHeader_t) + meas_header.NumberMeasuredValues * 3 + 14], 2);
+  memcpy (&scan.system_counter, &buffer_[sizeof(MeasurementHeader_t) + meas_header.NumberMeasuredValues * 3 + 16], 2);
 
   // Parse the read buffer and copy values into our distance/intensity buffer
   for (int i = 0; i < meas_header.NumberMeasuredValues; i++)
