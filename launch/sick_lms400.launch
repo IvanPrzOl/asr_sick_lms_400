@@ -5,7 +5,7 @@
 
   <node pkg="asr_sick_lms_400" type="sick_lms400" name="laserMapping" output="screen">
     <param name="enable_eRIS" value="0" /> <!-- options: 0,1 -->
-    <param name="encoder_type" value="4" /> <!-- options: 0,1,2,3,4 -->
+    <param name="encoder_type" value="2" /> <!-- options: 0,1,2,3,4 -->
     <param name="scanning_frequency" value="$(arg scanning_frequency)" />
 
     <remap from="/laser_scan" to="/lms400_points" />

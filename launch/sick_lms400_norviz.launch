@@ -1,0 +1,8 @@
+<launch>
+  <arg name="scanning_frequency" default="360.0" />
+  <node pkg="asr_sick_lms_400" type="sick_lms400" name="laserMapping" output="screen">
+    <param name="enable_eRIS" value="0" /> <!-- options: 0,1 -->
+    <param name="encoder_type" value="2" /> <!-- options: 0,1,2,3,4 #2phase detect,#4constant vel--> 
+    <param name="scanning_frequency" value="$(arg scanning_frequency)" />
+  </node>
+</launch>
