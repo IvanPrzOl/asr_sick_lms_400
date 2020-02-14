@@ -78,7 +78,7 @@ namespace asr_sick_lms_400
       int SetResolutionAndFrequency (float freq, float ang_res, float angle_start, float angle_range);
 
       int StartMeasurement (bool intensity = true);
-      asr_sick_lms_400::PhenocarLaserScan ReadMeasurement  (std_msgs::UInt16 &);
+      asr_sick_lms_400::PhenocarLaserScan ReadMeasurement  ();
       int StopMeasurement  ();
 
       int SetUserLevel  (int8_t userlevel, const char* password);

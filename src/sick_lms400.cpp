@@ -399,7 +399,7 @@ int
 ////////////////////////////////////////////////////////////////////////////////
 // Read a measurement
 asr_sick_lms_400::PhenocarLaserScan
-  asr_sick_lms_400::sick_lms_400::ReadMeasurement (std_msgs::UInt16 &encoder_position_)
+  asr_sick_lms_400::sick_lms_400::ReadMeasurement ()
 {
   asr_sick_lms_400::PhenocarLaserScan scan;
 
@@ -478,7 +478,7 @@ asr_sick_lms_400::PhenocarLaserScan
   uint16_t distance = 0;
   uint8_t remission = 0;
   int index = sizeof (MeasurementHeader_t);
-  uint16_t encoder_position = 0;
+  //uint16_t encoder_position = 0;
 
   // Fill in the appropriate values
   scan.angle_min       = angles::from_degrees (min_angle);
@@ -514,12 +514,12 @@ asr_sick_lms_400::PhenocarLaserScan
   }
 
   index += 3 * sizeof (uint16_t);
-  memcpy (&encoder_position, (void *)&buffer_[index], sizeof (uint16_t) );
-  encoder_position_.data = encoder_position;
+  memcpy (&scan.encoder_position, (void *)&buffer_[index], sizeof (uint16_t) );
+  //encoder_position_.data = encoder_position;
   index += sizeof (uint16_t);
   
   if (verbose_ == 2)
-    ROS_DEBUG (">>> Encoder position: %d", encoder_position);
+    ROS_DEBUG (">>> Encoder position: %d", scan.encoder_position);
 
   scan.header.frame_id = "lms400_base";
   scan.header.stamp = ros::Time::now ();

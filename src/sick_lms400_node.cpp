@@ -59,7 +59,7 @@ class LMS400Node
 
     sick_lms_400 lms_;
     asr_sick_lms_400::PhenocarLaserScan scan_;
-    std_msgs::UInt16 encoder_position_;
+    //std_msgs::UInt16 encoder_position_;
 
     Publisher scan_pub_;
     Publisher encoder_pub_;
@@ -145,8 +145,8 @@ class LMS400Node
         nh_.param ("encoder_type", encoder_type_, 2);
       }
 
-      scan_pub_ = nh_.advertise<asr_sick_lms_400::PhenocarLaserScan>("laser_scan", 1);
-      encoder_pub_ = nh_.advertise<std_msgs::UInt16>("encoder_position", 1);
+      scan_pub_ = nh_.advertise<asr_sick_lms_400::PhenocarLaserScan>("laser_scan_encoder", 1);
+      //encoder_pub_ = nh_.advertise<std_msgs::UInt16>("encoder_position", 1);
 
       loggedin_  = false;
     }
@@ -352,11 +352,11 @@ class LMS400Node
         // Refresh data only if laser power is on
         if (laser_enabled_)
         {
-          scan_ = lms_.ReadMeasurement (encoder_position_);
+          scan_ = lms_.ReadMeasurement ();
 
           if (scan_.ranges.size () != 0)
             scan_pub_.publish (scan_);
-          encoder_pub_.publish(encoder_position_);
+          //encoder_pub_.publish(encoder_position_);
           //ROS_INFO ("Publishing %d measurements.", (int)scan_.ranges.size ());
         }
         ros::spinOnce ();

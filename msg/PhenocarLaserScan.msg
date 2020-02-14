@@ -11,6 +11,7 @@ float32 scan_time        # time between scans [seconds]
 uint16 scan_counter      # counter, starting with the first scan after confirmation of the measured value telegram
 uint16 telegram_counter  # counter, starting with the first scan after confirmation of the measured value telegram
 uint16 system_counter    # Enables the relative time difference between two measured values telegrams to be calculated, information in 1/327.68 us
+uint16 encoder_position  # Information in ticks
 
 float32 range_min        # minimum range value [m]
 float32 range_max        # maximum range value [m]
