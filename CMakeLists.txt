@@ -7,6 +7,7 @@ add_definitions(-std=gnu++0x)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  sensor_msgs
   message_generation
 )
 
@@ -21,7 +22,7 @@ generate_messages(
 )
 
 catkin_package(
-  CATKIN_DEPENDS roscpp std_msgs message_generation
+  CATKIN_DEPENDS roscpp sensor_msgs std_msgs message_generation
   INCLUDE_DIRS include
   LIBRARIES asr_sick_lms_400)
 
