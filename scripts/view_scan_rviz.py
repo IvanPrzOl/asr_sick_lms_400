@@ -6,7 +6,7 @@ from sensor_msgs.msg import LaserScan
 class view_scan(object):
     def __init__(self):
         rospy.init_node('view_scan')
-        self._scan_sub = rospy.Subscriber('/laserMapping/laser_scan_encoder',LaserScan,self._extractScanLine)
+        self._scan_sub = rospy.Subscriber('/laserMapping/laser_scan_encoder',PhenocarLaserScan,self._extractScanLine)
         self._scan_pub = rospy.Publisher('laser_scan',LaserScan,queue_size = 20)
 
     def _extractScanLine(self,data):
